@@ -5,6 +5,26 @@ Description: >
 
   Sample SAM Template for rasa_clean
 
+Parameters:
+  PostgresHost:
+    Type: String
+    Default: localhost
+  PostgresPort:
+    Type: String
+    Default: "5432"
+  PostgresDatabase:
+    Type: String
+    Default: postgres
+  PostgresUser: 
+    Type: String
+    Default: postgres
+  PostgresPassword:
+    Type: String
+    Default: "1234"
+  Debug:
+    Type: String
+    Default: "false"
+
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
@@ -16,7 +36,7 @@ Resources:
     Properties:
       CodeUri: hello_world/
       Handler: app.lambda_handler
-      Runtime: python3.9
+      Runtime: python3.8
       Architectures:
         - x86_64
       Events:
