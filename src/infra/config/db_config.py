@@ -13,6 +13,7 @@ class DBConnectionHandler:
         self.__port = os.environ.get("POSTGRES_PORT")
         self.__database = os.environ.get("POSTGRES_DATABASE")
         self.__connection_string = f"postgresql://{self.__user}:{self.__password}@{self.__host}:{self.__port}/{self.__database}?sslmode=require"  # pylint: disable=max-line-length
+        self.__engine = self.__create_database_engine()
         self.session = None
 
     def get_engine(self):
@@ -20,6 +21,9 @@ class DBConnectionHandler:
         :parram - None
         :return - engine connection to Database
         """
+        return self.__engine
+
+    def __create_database_engine(self):
         engine = create_engine(self.__connection_string)
         return engine
 
