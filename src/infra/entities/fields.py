@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, Column, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql.sqltypes import DateTime
 from sqlalchemy.sql.sqltypes import Integer
-from src.infra.config import Base
+from infra.config import Base
 from datetime import datetime
 import uuid
 

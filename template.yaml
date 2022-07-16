@@ -8,7 +8,7 @@ Description: >
 Parameters:
   PostgresHost:
     Type: String
-    Default: localhost
+    Default: "database-server.c0pwhntgada8.sa-east-1.rds.amazonaws.com"
   PostgresPort:
     Type: String
     Default: "5432"
@@ -20,15 +20,26 @@ Parameters:
     Default: postgres
   PostgresPassword:
     Type: String
-    Default: "1234"
+    Default: "dqqmieJjHA48OGMfbGxR"
   Debug:
     Type: String
-    Default: "false"
+    Default: "true"
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 3
+    Environment:
+      Variables:
+        POSTGRES_HOST: !Ref PostgresHost
+        POSTGRES_PORT: !Ref PostgresPort
+        POSTGRES_DATABASE: !Ref PostgresDatabase
+        POSTGRES_USER: !Ref PostgresUser
+        POSTGRES_PASSWORD: !Ref PostgresPassword
+        DEBUG: !Ref Debug
+        ALLOWED_ORIGIN: !Ref AllowedOrigin 
+        ALLOWED_HEADERS: !Ref AllowedHeaders 
+        ALLOWED_METHODS: !Ref AllowedMethods
 
 Resources:
   HelloWorldFunction:
@@ -48,8 +59,8 @@ Resources:
   PostFieldsFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: ./
-      Handler: src/api/modules/fields.handler
+      CodeUri: src/
+      Handler: api/modules/fields.handler
       Runtime: python3.8
       Architectures:
         - x86_64

@@ -1,5 +1,5 @@
 from typing import Dict
-from src.data.models import Fields
+from data.models import Fields
 from abc import ABC, abstractclassmethod
 
 

@@ -1,9 +1,9 @@
 import uuid
 from datetime import datetime
-from src.infra.repositories.interfaces import Fields as Interface
-from src.data.models.fields import Fields
-from src.infra.config import DBConnectionHandler
-from src.infra.entities import Fields as FieldModel
+from infra.repositories.interfaces import Fields as Interface
+from data.models.fields import Fields
+from infra.config import DBConnectionHandler
+from infra.entities import Fields as FieldModel
 
 
 class FieldRepository(Interface):
@@ -65,5 +65,3 @@ class FieldRepository(Interface):
                 raise e
             finally:
                 db_conn.session.close()
-
-        return None
