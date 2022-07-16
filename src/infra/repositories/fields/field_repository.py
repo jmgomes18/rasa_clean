@@ -60,9 +60,9 @@ class FieldRepository(Interface):
                     created_at=datetime.now(),
                     updated_at=datetime.now(),
                 )
-            except:
+            except Exception as e:
                 db_conn.session.rollback()
-                raise
+                raise e
             finally:
                 db_conn.session.close()
 
