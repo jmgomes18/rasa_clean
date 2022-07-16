@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from src.data.repositories.interfaces import Fields as Interface
+from src.infra.repositories.interfaces import Fields as Interface
 from src.data.models.fields import Fields
 from src.infra.config import DBConnectionHandler
 from src.infra.entities import Fields as FieldModel
