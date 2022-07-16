@@ -23,4 +23,4 @@ class HttpResponse:
         self.body = body
 
     def __repr__(self):
-        return f"HttpResponse (status_code={self.status_code}, body={self.body})"
+        return f"HttpResponse (statusCode={self.status_code}, body={self.body})"
