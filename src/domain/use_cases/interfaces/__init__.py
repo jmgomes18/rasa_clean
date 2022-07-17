@@ -1,1 +1,1 @@
-from .fields import register_field
+from .fields import register_field, select_field

@@ -15,11 +15,11 @@ class RegisterFieldService:
         """implementing field service"""
 
         response = None
-        # if http_request.body not in http_request:
-        #     https_error = HttpErrors.error_400()
-        #     return HttpResponse(
-        #         status_code=https_error["statusCode"], body=https_error["body"]
-        #     )
+        if http_request.body not in http_request:
+            https_error = HttpErrors.error_400()
+            return HttpResponse(
+                status_code=https_error["statusCode"], body=https_error["body"]
+            )
 
         body_params = json.loads(http_request.body)
 
