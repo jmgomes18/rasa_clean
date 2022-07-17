@@ -1,3 +1,5 @@
+from typing import List
+from data.models import Fields
 from abc import ABC, abstractmethod
 
 
@@ -16,7 +18,12 @@ class Fields(ABC):
         order,
         created_at,
         updated_at,
-    ):
+    ) -> Fields:
         """Insert Field"""
 
-        raise Exception("Should implement method: by_field_id")
+        raise NotImplementedError
+
+    @abstractmethod
+    def select(cls, field_id: str = None, active: bool = None) -> List[Fields]:
+        """select fields"""
+        raise NotImplementedError

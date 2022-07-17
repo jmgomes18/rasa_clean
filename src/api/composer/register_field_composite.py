@@ -1,4 +1,4 @@
-from api.services.fields import RegisterFieldService
+from api.services.register_field_service import RegisterFieldService
 from domain.use_cases.fields.register_field import RegisterField
 from infra.repositories.fields.field_repository import FieldRepository
 
