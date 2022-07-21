@@ -8,19 +8,19 @@ Description: >
 Parameters:
   PostgresHost:
     Type: String
-    Default: "database-server.c0pwhntgada8.sa-east-1.rds.amazonaws.com"
+    Default: localhost
   PostgresPort:
     Type: String
     Default: "5432"
   PostgresDatabase:
     Type: String
     Default: postgres
-  PostgresUser: 
+  PostgresUser:
     Type: String
     Default: postgres
   PostgresPassword:
     Type: String
-    Default: "dqqmieJjHA48OGMfbGxR"
+    Default: "1234"
   Debug:
     Type: String
     Default: "true"
@@ -37,25 +37,8 @@ Globals:
         POSTGRES_USER: !Ref PostgresUser
         POSTGRES_PASSWORD: !Ref PostgresPassword
         DEBUG: !Ref Debug
-        ALLOWED_ORIGIN: !Ref AllowedOrigin 
-        ALLOWED_HEADERS: !Ref AllowedHeaders 
-        ALLOWED_METHODS: !Ref AllowedMethods
 
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
-      Runtime: python3.8
-      Architectures:
-        - x86_64
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /hello
-            Method: get
   PostFieldsFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -86,15 +69,9 @@ Resources:
             Method: get
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+  PostFieldsFunction:
+    Description: "Insert a new field: POST"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/fields/"
+  SelectFieldsFunction:
+    Description: "Select fields by status, id or both: GET"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/fields/"
