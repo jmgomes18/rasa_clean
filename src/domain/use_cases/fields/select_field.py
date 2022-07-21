@@ -25,8 +25,10 @@ class SelectField(SelectFieldInterface):
         response = None
         if active == "True":
             response = self.field_repository.select(active=True)
-        else:
+        elif active == "false":
             response = self.field_repository.select(active=False)
+        else:
+            return {"Success": False, "Data": response}
 
         return {"Success": True, "Data": response}
 
