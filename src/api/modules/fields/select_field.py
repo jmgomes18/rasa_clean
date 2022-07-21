@@ -1,4 +1,3 @@
-import json
 from api.adapter.adapter import adapter
 from api.composer.select_field_composite import select_field_composer
 
@@ -24,7 +23,10 @@ def handler(event, context):
                             "order": x.order,
                         }
                     )
-            return {"statusCode": 200, "body": json.dumps(message)}
+
+            return {"statusCode": 200, "body": {"fields": message}}
+        else:
+            return {"statusCode": 204}
 
     except Exception as e:
         # Handling Errors
