@@ -39,6 +39,11 @@ Globals:
         DEBUG: !Ref Debug
 
 Resources:
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+
   PostFieldsFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -48,11 +53,12 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
+        PostFields:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /fields
             Method: post
+            
   SelectFieldsFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -62,11 +68,27 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
+        GetFields:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /fields
             Method: get
+
+  PostFilesFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: api/modules/files/post_files.handler
+      Runtime: python3.8
+      Architectures:
+        - x86_64
+      Events:
+        PostFiles:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /files
+            Method: post
+
 
 Outputs:
   PostFieldsFunction:
