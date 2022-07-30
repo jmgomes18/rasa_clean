@@ -20,24 +20,6 @@ class BucketWrapper:
         client = boto3.client("s3")
         return client
 
-    def exists(self):
-        """
-        Determine whether the bucket exists and you have access to it.
-
-        :return: True when the bucket exists; otherwise, False.
-        """
-        try:
-            self.client.head_bucket(Bucket=self.bucket.name)
-            logger.info("Bucket %s exists.", self.bucket.name)
-            exists = True
-        except ClientError:
-            logger.warning(
-                "Bucket %s doesn't exist or you don't have access to it.",
-                self.bucket.name,
-            )
-            exists = False
-        return exists
-
     @staticmethod
     def list_buckets(client):
         """
@@ -111,6 +93,9 @@ class BucketWrapper:
                  required access data.
         """
         try:
+            if not self.name:
+                return None
+
             response = self.bucket.meta.client.generate_presigned_post(
                 Bucket=self.bucket.name, Key=object_key, ExpiresIn=expires_in
             )
