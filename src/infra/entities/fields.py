@@ -2,6 +2,7 @@ from sqlalchemy import Boolean, Column, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql.sqltypes import DateTime
 from sqlalchemy.sql.sqltypes import Integer
+from sqlalchemy.orm import relationship
 from infra.config import Base
 from datetime import datetime
 import uuid
@@ -24,6 +25,8 @@ class Fields(Base):
     updated_at = Column(
         "updated_at", DateTime, default=datetime.now, onupdate=datetime.now
     )
+    # Relationships
+    options = relationship("FieldOptions")
 
     def __repr__(self) -> str:
         return f"Field: [owner_id={self.owner_id}, title={self.title}, description={self.description}, active={self.active}, type={self.type}, order={self.order}]"
