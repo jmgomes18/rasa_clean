@@ -26,7 +26,7 @@ class Fields(Base):
     )
 
     def __repr__(self) -> str:
-        return f"Field: [owner_id={self.owner_id}, title={self.title}, description={self.description}, active={self.active}, type={self.type}, orfer={self.order}]"
+        return f"Field: [owner_id={self.owner_id}, title={self.title}, description={self.description}, active={self.active}, type={self.type}, order={self.order}]"
 
     def __eq__(self, __other: object) -> bool:
         if (
