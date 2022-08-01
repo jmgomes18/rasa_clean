@@ -1,14 +1,16 @@
 from typing import Type
-from domain.use_cases.interfaces.fields.register_field import RegisterField
+from domain.use_cases.interfaces.field_options.register_field_options import (
+    RegisterFieldOptions as UseCase,
+)
 from api.presenters.errors import HttpErrors
 from api.presenters.helpers import HttpRequest, HttpResponse
 
 
-class RegisterFieldService:
+class RegisterFieldOptionsService:
     """class to define register field service with its use cases"""
 
-    def __init__(self, register_field_use_case: Type[RegisterField]):
-        self.register_field_use_case = register_field_use_case
+    def __init__(self, use_case: Type[UseCase]):
+        self.use_case = use_case
 
     def route(self, http_request: Type[HttpRequest]) -> HttpResponse:
         """implementing field service"""
@@ -22,16 +24,10 @@ class RegisterFieldService:
 
         body_params = http_request.body
 
-        if "field" in body_params.keys():
-            owner_id = body_params["field"]["owner_id"]
-            title = body_params["field"]["title"]
-            description = body_params["field"]["description"]
-            active = body_params["field"]["active"]
-            type = body_params["field"]["type"]
-            order = body_params["field"]["order"]
-            response = self.register_field_use_case.registry(
-                owner_id, title, description, active, type, order
-            )
+        if "options" in body_params.keys():
+            name = body_params["options"]["name"]
+            value = body_params["options"]["value"]
+            response = self.use_case.registry(name, value, http_request.path_params)
 
         else:
             response = {"Success": False, "Data": None}

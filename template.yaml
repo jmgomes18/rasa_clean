@@ -58,6 +58,36 @@ Resources:
           Properties:
             Path: /fields
             Method: post
+
+  PostFormsFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: api/modules/forms/insert_form.handler
+      Runtime: python3.8
+      Architectures:
+        - x86_64
+      Events:
+        PostForms:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /forms
+            Method: post
+
+  PostFieldOptionsFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: api/modules/field_options/insert_field_options.handler
+      Runtime: python3.8
+      Architectures:
+        - x86_64
+      Events:
+        PostForms:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /{field_id}/options
+            Method: post
             
   SelectFieldsFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -94,6 +124,9 @@ Outputs:
   PostFieldsFunction:
     Description: "Insert a new field: POST"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/fields/"
+  PostFormsFunction:
+    Description: "Insert a new form: POST"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/forms/"
   SelectFieldsFunction:
     Description: "Select fields by status, id or both: GET"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/fields/"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/files/"

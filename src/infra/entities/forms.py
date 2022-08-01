@@ -23,7 +23,7 @@ class Forms(Base):
         "updated_at", DateTime, default=datetime.now, onupdate=datetime.now
     )
     # Relationships
-    form_fields = relationship("FormFields", back_populates="fields")
+    form_fields = relationship("FormFields")
 
     def __repr__(self) -> str:
         return f"Form: [owner_id={self.owner_id}, title={self.title}, description={self.description}, active={self.active}]"

@@ -7,8 +7,8 @@ from datetime import datetime
 import uuid
 
 
-class Survey(Base):
-    __tablename__ = "survey"
+class Surveys(Base):
+    __tablename__ = "surveys"
     __table_args__ = {"schema": "rasa"}
     __hidden_fields__ = {"owner_id"}
     __resource_name__ = {"singular": "survey", "plural": "surveys"}

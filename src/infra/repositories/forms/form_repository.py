@@ -1,64 +1,56 @@
 import uuid
 from typing import List
 from datetime import datetime
-from infra.repositories.interfaces import Fields as Interface
-from data.models.fields import Fields
+from infra.repositories.interfaces import Forms as Interface
+from data.models.forms import Forms
 from infra.config import DBConnectionHandler
-from infra.entities import Fields as FieldModel
+from infra.entities import Forms as FormModel
 from sqlalchemy.orm.exc import NoResultFound
 
 
-class FieldRepository(Interface):
-    """Field Repository"""
+class FormRepository(Interface):
+    """Form Repository"""
 
     @classmethod
-    def insert_field(
+    def insert_form(
         cls,
         owner_id: uuid,
         title: str,
         description: str,
         active: bool,
-        type: str,
-        order: int,
-    ) -> Fields:
+    ) -> Forms:
         """
-        Insert data in Fields entity
+        Insert data in Forms entity
         :param - self
                 - owner_id
                 - title
                 - description
                 - active
-                - type
-                - order
                 - created_at
                 - updated_at
-        :return - tuple with new field inserted
+        :return - tuple with new form inserted
         """
 
         with DBConnectionHandler() as db:
             try:
-                new_field = FieldModel(
+                new_form = FormModel(
                     id=uuid.uuid4(),
                     owner_id=owner_id,
                     title=title,
                     description=description,
                     active=active,
-                    type=type,
-                    order=order,
                     created_at=datetime.now(),
                     updated_at=datetime.now(),
                 )
-                db.session.add(new_field)
+                db.session.add(new_form)
                 db.session.commit()
 
-                return Fields(
+                return Forms(
                     id=uuid.uuid4(),
                     owner_id=owner_id,
                     title=title,
                     description=description,
                     active=active,
-                    type=type,
-                    order=order,
                     created_at=datetime.now(),
                     updated_at=datetime.now(),
                 )
@@ -69,27 +61,25 @@ class FieldRepository(Interface):
                 db.session.close()
 
     @classmethod
-    def select(cls, field_id: str = None, active: bool = None) -> List[Fields]:
+    def select(cls, form_id: str = None, active: bool = None) -> List[Forms]:
         with DBConnectionHandler() as db:
             try:
-                if field_id and not active:
+                if form_id and not active:
                     data = (
-                        db.session.query(FieldModel)
-                        .filter(FieldModel.id == field_id)
-                        .first()
+                        db.session.query(FormModel).filter(FormModel.id == id).first()
                     )
-                elif active and not field_id:
+                elif active and not form_id:
                     data = (
-                        db.session.query(FieldModel)
-                        .filter(FieldModel.active == active)
+                        db.session.query(FormModel)
+                        .filter(FormModel.active == active)
                         .all()
                     )
-                elif field_id and active:
-                    data = db.session.query(FieldModel).filter(
-                        FieldModel.id == field_id, FieldModel.active == active
+                elif form_id and active:
+                    data = db.session.query(FormModel).filter(
+                        FormModel.id == form_id, FormModel.active == active
                     )
                 else:
-                    data = db.session.query(FieldModel).all()
+                    data = db.session.query(FormModel).all()
 
                 return [data]
             except NoResultFound:

@@ -2,6 +2,7 @@ from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql.sqltypes import DateTime
 from infra.config import Base
+from infra.entities.fields import Fields
 from datetime import datetime
 import uuid
 
@@ -14,7 +15,7 @@ class FieldOptions(Base):
     id = Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String(50), nullable=False)
     value = Column(String(50), nullable=False)
-    field_id = Column(ForeignKey("fields.id"), primary_key=True)
+    field_id = Column(UUID(as_uuid=True), ForeignKey(Fields.id))
     created_at = Column("created_at", DateTime, default=datetime.now)
     updated_at = Column(
         "updated_at", DateTime, default=datetime.now, onupdate=datetime.now
