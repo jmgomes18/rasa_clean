@@ -15,6 +15,7 @@ def adapter(request: any, api_route: Type[RouteInterface]) -> any:
         header=request["headers"],
         body=json.loads(request["body"]),
         query=request["queryStringParameters"],
+        path_params=request["pathParameters"],
     )
 
     try:

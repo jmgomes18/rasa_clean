@@ -73,6 +73,21 @@ Resources:
           Properties:
             Path: /forms
             Method: post
+
+  PostFieldOptionsFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: api/modules/field_options/insert_field_options.handler
+      Runtime: python3.8
+      Architectures:
+        - x86_64
+      Events:
+        PostForms:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /{field_id}/options
+            Method: post
             
   SelectFieldsFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
