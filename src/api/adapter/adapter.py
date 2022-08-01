@@ -11,9 +11,12 @@ def adapter(request: any, api_route: Type[RouteInterface]) -> any:
     :param - request
     :api_route: Composite Routes
     """
+    body = None
+    if request["body"]:
+        body = json.loads(request["body"])
     http_request = HttpRequest(
         header=request["headers"],
-        body=json.loads(request["body"]),
+        body=body,
         query=request["queryStringParameters"],
         path_params=request["pathParameters"],
     )

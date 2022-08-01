@@ -22,8 +22,8 @@ class SelectFieldService(RouteInterface):
             if "field_id" in query_string_params and "active" in query_string_params:
                 field_id = http_request.query["field_id"]
                 active = http_request.query["active"]
-                response = self.select_field_use_case.by_id_and_name(
-                    field_id=field_id, name=active
+                response = self.select_field_use_case.by_id_and_active(
+                    field_id=field_id, active=active
                 )
 
             elif (
