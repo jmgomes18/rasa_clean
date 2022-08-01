@@ -1,3 +1,4 @@
+import json
 from typing import Type
 from sqlalchemy.exc import IntegrityError
 from api.services.service_interface import RouteInterface
@@ -10,10 +11,9 @@ def adapter(request: any, api_route: Type[RouteInterface]) -> any:
     :param - request
     :api_route: Composite Routes
     """
-
     http_request = HttpRequest(
         header=request["headers"],
-        body=request["body"],
+        body=json.loads(request["body"]),
         query=request["queryStringParameters"],
     )
 

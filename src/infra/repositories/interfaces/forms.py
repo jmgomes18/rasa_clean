@@ -7,7 +7,7 @@ class Forms(ABC):
     """Interface to FindUser use case"""
 
     @abstractmethod
-    def insert_field(
+    def insert_form(
         cls,
         id,
         owner_id,

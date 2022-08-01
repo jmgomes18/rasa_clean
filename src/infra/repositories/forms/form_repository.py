@@ -2,17 +2,17 @@ import uuid
 from typing import List
 from datetime import datetime
 from infra.repositories.interfaces import Forms as Interface
-from data.models.fields import Forms
+from data.models.forms import Forms
 from infra.config import DBConnectionHandler
 from infra.entities import Forms as FormModel
 from sqlalchemy.orm.exc import NoResultFound
 
 
-class FieldRepository(Interface):
-    """Field Repository"""
+class FormRepository(Interface):
+    """Form Repository"""
 
     @classmethod
-    def insert_field(
+    def insert_form(
         cls,
         owner_id: uuid,
         title: str,

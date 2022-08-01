@@ -14,7 +14,7 @@ class Sections(Base):
 
     id = Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String(50), nullable=False)
-    parent_id = Column(ForeignKey("sections.id"), primary_key=True)
+    parent_id = Column(ForeignKey(id), primary_key=True)
     created_at = Column("created_at", DateTime, default=datetime.now)
     updated_at = Column(
         "updated_at", DateTime, default=datetime.now, onupdate=datetime.now

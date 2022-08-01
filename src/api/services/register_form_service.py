@@ -1,17 +1,17 @@
 from typing import Type
-from domain.use_cases.interfaces.fields.register_field import RegisterField
+from domain.use_cases.interfaces.forms.register_form import RegisterForm
 from api.presenters.errors import HttpErrors
 from api.presenters.helpers import HttpRequest, HttpResponse
 
 
-class RegisterFieldService:
-    """class to define register field service with its use cases"""
+class RegisterFormService:
+    """class to define register form service with its use cases"""
 
-    def __init__(self, register_field_use_case: Type[RegisterField]):
-        self.register_field_use_case = register_field_use_case
+    def __init__(self, register_form_use_case: Type[RegisterForm]):
+        self.register_form_use_case = register_form_use_case
 
     def route(self, http_request: Type[HttpRequest]) -> HttpResponse:
-        """implementing field service"""
+        """implementing form service"""
 
         response = None
         if not http_request.body:
@@ -22,15 +22,13 @@ class RegisterFieldService:
 
         body_params = http_request.body
 
-        if "field" in body_params.keys():
-            owner_id = body_params["field"]["owner_id"]
-            title = body_params["field"]["title"]
-            description = body_params["field"]["description"]
-            active = body_params["field"]["active"]
-            type = body_params["field"]["type"]
-            order = body_params["field"]["order"]
-            response = self.register_field_use_case.registry(
-                owner_id, title, description, active, type, order
+        if "form" in body_params.keys():
+            owner_id = body_params["form"]["owner_id"]
+            title = body_params["form"]["title"]
+            description = body_params["form"]["description"]
+            active = body_params["form"]["active"]
+            response = self.register_form_use_case.registry(
+                owner_id, title, description, active
             )
 
         else:
