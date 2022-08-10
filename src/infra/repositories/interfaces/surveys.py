@@ -15,6 +15,6 @@ class Surveys(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def select(cls, field_id: str = None, active: bool = None) -> List[Surveys]:
+    def select(cls, field_id: str = None, status: bool = None) -> List[Surveys]:
         """select Surveys"""
         raise NotImplementedError
