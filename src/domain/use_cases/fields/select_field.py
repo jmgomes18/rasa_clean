@@ -34,7 +34,7 @@ class SelectField(SelectFieldInterface):
 
     def by_id_and_active(self, field_id: int, active: str) -> Dict[bool, List[Fields]]:
         response = None
-        validate_entry = isinstance(active, bool) and isinstance(field_id, str)
+        validate_entry = isinstance(field_id, str)
 
         if validate_entry:
             response = self.field_repository.select(field_id=field_id, active=active)

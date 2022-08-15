@@ -76,7 +76,7 @@ class FieldRepository(Interface):
                     data = (
                         db.session.query(FieldModel)
                         .filter(FieldModel.id == field_id)
-                        .first()
+                        .all()
                     )
                 elif active and not field_id:
                     data = (
