@@ -47,6 +47,19 @@ class BucketWrapper:
                 f"Bucket {name} doesn't exist or you don't have access to it."
             )
 
+    def credential_file_exists(self):
+        try:
+            validate = self.__client.head_object(
+                Bucket=self.name, Key="credentials.txt"
+            )
+            return validate
+        except ClientError as ex:
+            if ex.response["Error"]["Code"] == "404":
+                logger.info("No object found - returning empty")
+                return None
+            else:
+                raise
+
     def get_acl(self):
         """
         Get the ACL of the bucket.

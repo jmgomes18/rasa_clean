@@ -24,6 +24,37 @@ Parameters:
   Debug:
     Type: String
     Default: "true"
+  GrantType:
+    Type: String
+    Default: "1234"
+  SecretKey:
+    Type: String
+    Default: "1234"
+  ClientId:
+    Type: String
+    Default: "1234"
+  ResourceId:
+    Type: String
+    Default: "1234"
+  LoginUrl:
+    Type: String
+    Default: "1234"
+  GroupId:
+    Type: String
+    Default: "1234"
+  Token:
+    Type: String
+    Default: "1234"
+  DashboardId:
+    Type: String
+    Default: "1234"
+  DatasetId:
+    Type: String
+    Default: "1234"
+  Bucket:
+    Type: String
+    Default: "1234"
+  
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -118,6 +149,51 @@ Resources:
           Properties:
             Path: /files
             Method: post
+
+  LoginMicrosoftFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: api/modules/esafe/authenticate.get_microsoft_token
+      Runtime: python3.8
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          GRANT_TYPE: !Ref GrantType
+          SECRET_KEY: !Ref SecretKey
+          CLIENT_ID: !Ref ClientId
+          RESOURCE_ID: !Ref ResourceId
+          LOGIN_URL: !Ref LoginUrl
+          BUCKET: !Ref Bucket
+      Events:
+        EsafeAPI:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /get_auth_token
+            Method: get
+  
+  GetDashboardData:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: api/modules/esafe/authenticate.get_power_bi_token
+      Runtime: python3.8
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          GROUP_ID: !Ref GroupId
+          TOKEN: !Ref Token
+          DASHBOARD_ID: !Ref DashboardId
+          DATASET_ID: !Ref DatasetId
+          BUCKET: !Ref Bucket
+      Events:
+        EsafeAPI:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /get_dashboard_token
+            Method: get
 
 
 Outputs:
