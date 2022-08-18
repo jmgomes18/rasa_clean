@@ -1,6 +1,6 @@
 import json
 import logging
-
+from datetime import datetime, timezone
 import boto3
 from botocore.exceptions import ClientError
 
@@ -121,3 +121,15 @@ class BucketWrapper:
             )
             raise
         return response
+
+    def check_object_creation_date(self):
+        response = self.__client.list_objects_v2(
+            Bucket=self.name,
+            Prefix="credentials",
+            MaxKeys=1,
+        )
+        checker = datetime.now(timezone.utc) - response["Contents"][0]["LastModified"]
+        if checker.seconds >= 43200:
+            return False
+
+        return True

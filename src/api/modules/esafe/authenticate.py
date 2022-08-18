@@ -15,7 +15,7 @@ def get_microsoft_token(event, context):
         handler = CreateMicrosoftAuth()
         s3 = BucketWrapper(bucket)
 
-        if s3.credential_file_exists():
+        if s3.credential_file_exists() and s3.check_object_creation_date():
             logger.info("Auth token still valid")
             return {"statusCode": 204}
 
