@@ -45,7 +45,10 @@ Parameters:
   Token:
     Type: String
     Default: "1234"
-  DashboardId:
+  EsafeDashboardId:
+    Type: String
+    Default: "1234"
+  UpsDashboardId:
     Type: String
     Default: "1234"
   DatasetId:
@@ -173,11 +176,11 @@ Resources:
             Path: /get_auth_token
             Method: get
   
-  GetDashboardData:
+  GetEsafeDashboardData:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: src/
-      Handler: api/modules/esafe/authenticate.get_power_bi_token
+      Handler: api/modules/esafe/authenticate.get_esafe_token
       Runtime: python3.8
       Architectures:
         - x86_64
@@ -185,14 +188,36 @@ Resources:
         Variables:
           GROUP_ID: !Ref GroupId
           TOKEN: !Ref Token
-          DASHBOARD_ID: !Ref DashboardId
+          ESAFE_DASHBOARD_ID: !Ref EsafeDashboardId
           DATASET_ID: !Ref DatasetId
           BUCKET: !Ref Bucket
       Events:
         EsafeAPI:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /get_dashboard_token
+            Path: /get_esafe_token
+            Method: get
+
+  GetUPSDashboardData:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: api/modules/esafe/authenticate.get_ups_token
+      Runtime: python3.8
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          GROUP_ID: !Ref GroupId
+          TOKEN: !Ref Token
+          UPS_DASHBOARD_ID: !Ref UpsDashboardId
+          DATASET_ID: !Ref DatasetId
+          BUCKET: !Ref Bucket
+      Events:
+        EsafeAPI:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /get_ups_token
             Method: get
 
 

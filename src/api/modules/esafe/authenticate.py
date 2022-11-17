@@ -35,12 +35,23 @@ def get_microsoft_token(event, context):
         }
 
 
-def get_power_bi_token(event, context):
+def get_esafe_token(event, context):
     params = event["queryStringParameters"]["access_token"]
     logger.info("auth token", params)
 
     handler = CreateMicrosoftAuth()
 
-    response = handler.get_dashboard_data(params.replace('"', ""))
+    response = handler.get_esafe_dashboard_data(params.replace('"', ""))
+
+    return {"statusCode": 200, "body": json.dumps({"content": response})}
+
+
+def get_ups_token(event, context):
+    params = event["queryStringParameters"]["access_token"]
+    logger.info("auth token", params)
+
+    handler = CreateMicrosoftAuth()
+
+    response = handler.get_ups_dashboard_data(params.replace('"', ""))
 
     return {"statusCode": 200, "body": json.dumps({"content": response})}

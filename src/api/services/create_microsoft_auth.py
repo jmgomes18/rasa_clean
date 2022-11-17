@@ -27,9 +27,26 @@ class CreateMicrosoftAuth:
         except RuntimeError:
             return {"statusCode": 500, "body": "Bad request"}
 
-    def get_dashboard_data(self, token):
+    def get_esafe_dashboard_data(self, token):
         group_id = os.environ.get("GROUP_ID")
-        dashboard_id = os.environ.get("DASHBOARD_ID")
+        dashboard_id = os.environ.get("ESAFE_DASHBOARD_ID")
+        dataset_id = os.environ.get("DATASET_ID")
+
+        url = f"https://api.powerbi.com/v1.0/myorg/groups/{group_id}/dashboards/{dashboard_id}/GenerateToken"
+
+        payload = json.dumps({"accessLevel": "View", "datasetId": dataset_id})
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {token}",
+        }
+
+        response = request("POST", url, headers=headers, data=payload)
+
+        return json.loads(response.text)
+
+    def get_ups_dashboard_data(self, token):
+        group_id = os.environ.get("GROUP_ID")
+        dashboard_id = os.environ.get("UPS_DASHBOARD_ID")
         dataset_id = os.environ.get("DATASET_ID")
 
         url = f"https://api.powerbi.com/v1.0/myorg/groups/{group_id}/dashboards/{dashboard_id}/GenerateToken"
