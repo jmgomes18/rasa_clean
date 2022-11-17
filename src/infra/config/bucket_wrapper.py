@@ -1,6 +1,6 @@
 import json
 import logging
-
+from datetime import datetime, timezone
 import boto3
 from botocore.exceptions import ClientError
 
@@ -46,6 +46,19 @@ class BucketWrapper:
             logging.warning(
                 f"Bucket {name} doesn't exist or you don't have access to it."
             )
+
+    def credential_file_exists(self):
+        try:
+            validate = self.__client.head_object(
+                Bucket=self.name, Key="credentials.txt"
+            )
+            return validate
+        except ClientError as ex:
+            if ex.response["Error"]["Code"] == "404":
+                logger.info("No object found - returning empty")
+                return None
+            else:
+                raise
 
     def get_acl(self):
         """
@@ -108,3 +121,15 @@ class BucketWrapper:
             )
             raise
         return response
+
+    def check_object_creation_date(self):
+        response = self.__client.list_objects_v2(
+            Bucket=self.name,
+            Prefix="credentials",
+            MaxKeys=1,
+        )
+        checker = datetime.now(timezone.utc) - response["Contents"][0]["LastModified"]
+        if checker.seconds >= 43200:
+            return False
+
+        return True
