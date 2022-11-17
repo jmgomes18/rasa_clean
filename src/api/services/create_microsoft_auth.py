@@ -1,6 +1,7 @@
 import os
 import json
 from requests import request
+from datetime import datetime
 from infra.config.bucket_wrapper import BucketWrapper
 
 
@@ -39,11 +40,17 @@ class CreateMicrosoftAuth:
             "Authorization": f"Bearer {token}",
         }
 
-        return request("POST", url, headers=headers, data=payload)
+        response = request("POST", url, headers=headers, data=payload)
 
-    def check_expiration_date(self, expiration_date):
-        # TODO should check expiration date from the first time authentication method was called
-        pass
+        return json.loads(response.text)
+
+    def check_if_token_expired(self, expiration_date):
+        check_date = datetime.strptime(expiration_date, "%Y-%m-%dT%H:%M:%SZ")
+
+        if datetime.now() < check_date:
+            return False
+
+        return True
 
     def store_credentials(self, bucket, token):
         try:
@@ -52,5 +59,6 @@ class CreateMicrosoftAuth:
             handler.get_boto_client().put_object(
                 Bucket=handler.name, Key="credentials.txt", Body=str.encode(token)
             )
+
         except RuntimeError as e:
             return {"error": json.dumps(e)}

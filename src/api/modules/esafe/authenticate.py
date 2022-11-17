@@ -1,6 +1,6 @@
-import json
 import logging
 import os
+import json
 
 from api.services.create_microsoft_auth import CreateMicrosoftAuth
 from infra.config.bucket_wrapper import BucketWrapper
@@ -22,7 +22,11 @@ def get_microsoft_token(event, context):
         response = handler.login_power_bi()
         handler.store_credentials(bucket, response["access_token"])
 
-        return {"statusCode": 200, "body": {"content": response}}
+        return {
+            "statusCode": 200,
+            "body": json.dumps({"content": response["access_token"]}),
+        }
+
     except RuntimeError as exc:
         logger.error("error", exc)
         return {
@@ -32,7 +36,11 @@ def get_microsoft_token(event, context):
 
 
 def get_power_bi_token(event, context):
-    token = os.environ.get("TOKEN")
+    params = event["queryStringParameters"]["access_token"]
+    logger.info("auth token", params)
+
     handler = CreateMicrosoftAuth()
-    response = handler.get_dashboard_data(token)
-    return {"statusCode": 200, "body": {"content": json.loads(response.text)}}
+
+    response = handler.get_dashboard_data(params.replace('"', ""))
+
+    return {"statusCode": 200, "body": json.dumps({"content": response})}
