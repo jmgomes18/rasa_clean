@@ -7,6 +7,11 @@ from infra.config.bucket_wrapper import BucketWrapper
 
 logger = logging.getLogger(__name__)
 
+HEADERS = {
+    "Access-Control-Allow-Origin": '*',
+    "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+    "ALLOWED_HEADERS": "Content-Type,Authorization,X-Esmt-Application",
+}
 
 def get_microsoft_token(event, context):
     try:
@@ -20,11 +25,7 @@ def get_microsoft_token(event, context):
             logger.info("Auth token still valid")
             return {
                 "statusCode": 200,
-                "headers": {
-                    "Access-Control-Allow-Headers": "Content-Type",
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-                },
+                "headers": HEADERS,
                 "body": json.dumps({"token": response}),
             }
 
@@ -33,11 +34,7 @@ def get_microsoft_token(event, context):
         return {
             "statusCode": 200,
             "body": json.dumps({"content": response["access_token"]}),
-            "headers": {
-                "Access-Control-Allow-Headers": "Content-Type",
-                "Acess-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-            },
+            "headers": HEADERS,
         }
 
     except RuntimeError as exc:
@@ -61,21 +58,13 @@ def get_ups_token(event, context):
         handler.store_credentials(bucket, response)
 
         return {
-            "headers": {
-                "Access-Control-Allow-Headers": "Content-Type",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-            },
             "statusCode": 200,
+            "headers": HEADERS,
             "body": json.dumps({"content": response}),
         }
     except Exception as e:
         return {
-            "headers": {
-                "Access-Control-Allow-Headers": "Content-Type",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-            },
             "statusCode": 502,
+            "headers": HEADERS,
             "body": json.dumps({"error": e}),
         }
