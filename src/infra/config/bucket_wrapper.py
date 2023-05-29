@@ -128,8 +128,18 @@ class BucketWrapper:
             Prefix="credentials",
             MaxKeys=1,
         )
+
         checker = datetime.now(timezone.utc) - response["Contents"][0]["LastModified"]
         if checker.seconds >= 43200:
             return False
 
         return True
+
+    def get_file_content(self):
+        try:
+            data = self.__client.get_object(Bucket=self.name, Key="credentials.txt")
+            contents = data["Body"].read()
+
+            return contents.decode("utf-8")
+        except Exception as e:
+            raise e

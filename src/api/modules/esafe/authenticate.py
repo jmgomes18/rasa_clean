@@ -1,6 +1,6 @@
+import json
 import logging
 import os
-import json
 
 from api.services.create_microsoft_auth import CreateMicrosoftAuth
 from infra.config.bucket_wrapper import BucketWrapper
@@ -16,15 +16,28 @@ def get_microsoft_token(event, context):
         s3 = BucketWrapper(bucket)
 
         if s3.credential_file_exists() and s3.check_object_creation_date():
+            response = s3.get_file_content()
             logger.info("Auth token still valid")
-            return {"statusCode": 204}
+            return {
+                "statusCode": 200,
+                "headers": {
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+                },
+                "body": json.dumps({"token": response}),
+            }
 
         response = handler.login_power_bi()
-        handler.store_credentials(bucket, response["access_token"])
 
         return {
             "statusCode": 200,
             "body": json.dumps({"content": response["access_token"]}),
+            "headers": {
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Acess-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+            },
         }
 
     except RuntimeError as exc:
@@ -35,23 +48,34 @@ def get_microsoft_token(event, context):
         }
 
 
-def get_esafe_token(event, context):
-    params = event["queryStringParameters"]["access_token"]
-    logger.info("auth token", params)
-
-    handler = CreateMicrosoftAuth()
-
-    response = handler.get_esafe_dashboard_data(params.replace('"', ""))
-
-    return {"statusCode": 200, "body": json.dumps({"content": response})}
-
-
 def get_ups_token(event, context):
-    params = event["queryStringParameters"]["access_token"]
-    logger.info("auth token", params)
+    try:
+        bucket = os.environ.get("BUCKET")
+        handler = CreateMicrosoftAuth()
 
-    handler = CreateMicrosoftAuth()
+        params = event["queryStringParameters"]["access_token"]
+        logger.info("auth token", params)
 
-    response = handler.get_ups_dashboard_data(params.replace('"', ""))
+        response = handler.get_ups_dashboard_data(params.replace('"', ""))
 
-    return {"statusCode": 200, "body": json.dumps({"content": response})}
+        handler.store_credentials(bucket, response)
+
+        return {
+            "headers": {
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+            },
+            "statusCode": 200,
+            "body": json.dumps({"content": response}),
+        }
+    except Exception as e:
+        return {
+            "headers": {
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+            },
+            "statusCode": 502,
+            "body": json.dumps({"error": e}),
+        }

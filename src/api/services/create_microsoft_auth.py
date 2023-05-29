@@ -74,7 +74,9 @@ class CreateMicrosoftAuth:
             handler = BucketWrapper(bucket)
 
             handler.get_boto_client().put_object(
-                Bucket=handler.name, Key="credentials.txt", Body=str.encode(token)
+                Bucket=handler.name,
+                Key="credentials.txt",
+                Body=str.encode(token["token"]),
             )
 
         except RuntimeError as e:
